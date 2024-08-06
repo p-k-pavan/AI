@@ -14,10 +14,6 @@ export const signUp = async (req, res) => {
     try {
         const { name, email, password, chat } = req.body;
 
-        if (!name || !email || !password) {
-            return res.status(400).json({ message: "Please fill all fields" });
-        }
-
         const check_email = await User.findOne({ email });
        
 
