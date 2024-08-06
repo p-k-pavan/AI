@@ -1,5 +1,6 @@
 import User from "../models/User.js"
 import bcrypt from "bcrypt"
+import {createToken} from "../utils/token-manager.js"
 
 export const getAllUsers = async(req,res) =>{
     try {
@@ -24,6 +25,22 @@ export const signUp = async (req, res) => {
         const hashPassword = await bcrypt.hash(password, 10);
         const user = new User({ name, email, password: hashPassword, chat });
         await user.save();
+        res.clearCookie("auth_token",{
+            domain:"localhost",
+            path:"/",
+            httpOnly:true,
+            signed:true
+        });
+        const token = createToken(user._id.toString(),user.email,"7d");
+        const expires = new Date();
+        expires.setDate(expires.getDate()+7);
+        res.cookie("auth_token",token,{
+            path:'/',
+            domain:"localhost",
+            expires,
+            httpOnly:true,
+            signed:true
+        })
 
         return res.status(201).json({ message: "User created successfully" });
 
@@ -48,6 +65,24 @@ export const login = async (req, res) => {
         if (!isPassword) {
             return res.status(403).json({ message: "invalid credential" });
         }
+
+        res.clearCookie("auth_token",{
+            domain:"localhost",
+            path:"/",
+            httpOnly:true,
+            signed:true
+        });
+        const token = createToken(user._id.toString(),user.email,"7d");
+        const expires = new Date();
+        expires.setDate(expires.getDate()+7);
+        res.cookie("auth_token",token,{
+            path:'/',
+            domain:"localhost",
+            expires,
+            httpOnly:true,
+            signed:true
+        })
+        
         return res.status(201).json({ message: "User login successfully" });
 
     } catch (error) {
