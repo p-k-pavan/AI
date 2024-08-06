@@ -14,7 +14,7 @@ export const signUp = async (req, res) => {
         const { name, email, password, chat } = req.body;
         const check_email = await User.findOne({ email });
         if (check_email) {
-            return res.status(400).json({ message: "Email already exists" });
+            return res.status(401).json({ message: "Email already exists" });
         }
         const hashPassword = await bcrypt.hash(password, 10);
         const user = new User({ name, email, password: hashPassword, chat });
@@ -23,6 +23,24 @@ export const signUp = async (req, res) => {
     }
     catch (error) {
         console.error("Error during sign-up:", error);
+        return res.status(500).json({ message: "Something went wrong, please try again" });
+    }
+};
+export const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(401).json({ message: "Email does not exists" });
+        }
+        const isPassword = await bcrypt.compare(password, user.password);
+        if (!isPassword) {
+            return res.status(403).json({ message: "invalid credential" });
+        }
+        return res.status(201).json({ message: "User login successfully" });
+    }
+    catch (error) {
+        console.error("Error during login-up:", error);
         return res.status(500).json({ message: "Something went wrong, please try again" });
     }
 };
