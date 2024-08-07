@@ -15,7 +15,7 @@ export const signUp = async (req, res) => {
         const { name, email, password, chat } = req.body;
         const check_email = await User.findOne({ email });
         if (check_email) {
-            return res.status(401).json({ message: "Email already exists" });
+            return res.status(401).json({ success: false, message: "Email already exists" });
         }
         const hashPassword = await bcrypt.hash(password, 10);
         const user = new User({ name, email, password: hashPassword, chat });
@@ -36,7 +36,7 @@ export const signUp = async (req, res) => {
             httpOnly: true,
             signed: true
         });
-        return res.status(201).json({ message: "User created successfully" });
+        return res.status(201).json({ message: "User created successfully", });
     }
     catch (error) {
         console.error("Error during sign-up:", error);

@@ -12,6 +12,7 @@ export const validate = (validations) => {
             return next();
         }
         res.status(422).json({
+            success: false,
             errors: errors.array(),
         });
     };

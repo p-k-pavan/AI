@@ -19,7 +19,7 @@ export const signUp = async (req, res) => {
        
 
         if (check_email) {
-            return res.status(401).json({ message: "Email already exists" });
+            return res.status(401).json({success: false, message: "Email already exists" });
         }
 
         const hashPassword = await bcrypt.hash(password, 10);
@@ -42,7 +42,7 @@ export const signUp = async (req, res) => {
             signed:true
         })
 
-        return res.status(201).json({ message: "User created successfully" });
+        return res.status(201).json({ message: "User created successfully", });
 
     } catch (error) {
         console.error("Error during sign-up:", error);

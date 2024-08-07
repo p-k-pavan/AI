@@ -13,6 +13,7 @@ export const validate = (validations:ValidationChain[])=>{
                return next()
             }
             res.status(422).json({
+                success: false,
                 errors: errors.array(),
             })
         
