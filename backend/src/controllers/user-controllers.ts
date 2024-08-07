@@ -42,11 +42,11 @@ export const signUp = async (req, res) => {
             signed:true
         })
 
-        return res.status(201).json({ message: "User created successfully", });
+        return res.status(201).json({ message: "User created successfully",success:true });
 
     } catch (error) {
         console.error("Error during sign-up:", error);
-        return res.status(500).json({ message: "Something went wrong, please try again" });
+        return res.status(500).json({success:false, message: "Something went wrong, please try again" });
     }
 };
 
@@ -58,12 +58,12 @@ export const login = async (req, res) => {
         const user = await User.findOne({ email });
        
         if (!user) {
-            return res.status(401).json({ message: "Email does not exists" });
+            return res.status(401).json({success:false, message: "Email does not exists" });
         }
 
         const isPassword = await bcrypt.compare(password,user.password);
         if (!isPassword) {
-            return res.status(403).json({ message: "invalid credential" });
+            return res.status(403).json({success:false, message: "invalid credential" });
         }
 
         res.clearCookie("auth_token",{
@@ -83,10 +83,10 @@ export const login = async (req, res) => {
             signed:true
         })
         
-        return res.status(201).json({ message: "User login successfully" });
+        return res.status(201).json({ message: "User login successfully" ,success:true});
 
     } catch (error) {
         console.error("Error during login-up:", error);
-        return res.status(500).json({ message: "Something went wrong, please try again" });
+        return res.status(500).json({ message: "Something went wrong, please try again" , success:false});
     }
 };
