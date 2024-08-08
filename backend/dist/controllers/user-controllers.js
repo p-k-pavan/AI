@@ -70,7 +70,8 @@ export const login = async (req, res) => {
             httpOnly: true,
             signed: true
         });
-        return res.status(201).json({ message: "User login successfully", success: true, id: user._id });
+        const { password: pass, ...rest } = user._doc;
+        return res.status(201).json(rest);
     }
     catch (error) {
         console.error("Error during login-up:", error);
