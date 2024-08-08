@@ -70,7 +70,7 @@ export const login = async (req, res) => {
             httpOnly: true,
             signed: true
         });
-        return res.status(201).json({ message: "User login successfully", success: true });
+        return res.status(201).json({ message: "User login successfully", success: true, id: user._id });
     }
     catch (error) {
         console.error("Error during login-up:", error);

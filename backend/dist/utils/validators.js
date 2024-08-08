@@ -26,4 +26,7 @@ export const signUpValidator = [
     body("email").trim().isEmail().withMessage("email is required"),
     body("password").trim().isLength({ min: 8 }).withMessage("password is should contain alteast 8 character"),
 ];
+export const chatValidator = [
+    body("name").notEmpty().withMessage("Message is required"),
+];
 //# sourceMappingURL=validators.js.map
